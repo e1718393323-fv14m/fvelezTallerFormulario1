@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:services="clr-namespace:fvelezTA1.Services"
+             x:Class="fvelezTA1.MainPage"
+             Title="Formulario de inscripción"
+             BackgroundColor="#F5F6FA">
+
+    <ContentPage.Resources>
+        <!-- Caja con borde visible para cada campo: así se distinguen en Windows y Android -->
+        <Style x:Key="Caja" TargetType="Border">
+            <Setter Property="Stroke" Value="#C9CED8" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="Padding" Value="8,0" />
+            <Setter Property="MinimumHeightRequest" Value="48" />
+        </Style>
+        <Style x:Key="Campo" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="#1C1C1C" />
+            <Setter Property="PlaceholderColor" Value="#A0A0A0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="MinimumHeightRequest" Value="46" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <!-- Estilos que aplica TextValidationBehavior según el valor sea válido o no -->
+        <Style x:Key="CampoValido" TargetType="Entry" BasedOn="{StaticResource Campo}">
+            <Setter Property="TextColor" Value="#1C1C1C" />
+        </Style>
+        <Style x:Key="CampoInvalido" TargetType="Entry" BasedOn="{StaticResource Campo}">
+            <Setter Property="TextColor" Value="#C62828" />
+        </Style>
+        <Style x:Key="Selector" TargetType="Picker">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="#1C1C1C" />
+            <Setter Property="TitleColor" Value="#A0A0A0" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="MinimumHeightRequest" Value="46" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="Etiqueta" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#3A3A3A" />
+        </Style>
+        <Style x:Key="Seccion" TargetType="Label">
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#1C3D6E" />
+        </Style>
+        <Style x:Key="Tarjeta" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="Stroke" Value="#E3E6EE" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+            <Setter Property="Padding" Value="20" />
+        </Style>
+        <Style x:Key="Error" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="#C62828" />
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ver TXT" Clicked="OnVerArchivoClicked" />
+        <ToolbarItem Text="Cerrar sesión" Clicked="OnCerrarSesionClicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout x:Name="contenedor"
+                             Padding="30,20"
+                             Spacing="16"
+                             MaximumWidthRequest="860">
+
+            <!-- ENCABEZADO (igual al ejemplo de clase) -->
+            <Label Text="Taller Semana 1"
+                   FontSize="24"
+                   TextColor="Red"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Formulario de inscripción:"
+                   FontSize="20"
+                   TextColor="Blue" />
+
+            <Image Source="logo_uisrael.png"
+                   HeightRequest="70"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   SemanticProperties.Description="Logo de la Universidad Israel" />
+
+            <Label Text="FASE A - GRADO · Complete la siguiente información para realizar su inscripción."
+                   FontSize="14"
+                   TextColor="#555555"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- ===================== DATOS PERSONALES ===================== -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Datos personales" Style="{StaticResource Seccion}" />
+
+                    <Grid x:Name="parIdentificacion" ColumnSpacing="16" RowSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Tipo de identificación" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                    <Picker x:Name="pkTipoId"
+                                            Title="{OnPlatform Default='Seleccione...', WinUI=''}"
+                                            Style="{StaticResource Selector}"
+                                            SelectedIndexChanged="OnTipoIdentificacionChanged" />
+                                    <Path Grid.Column="1" Data="M0,0 L6,6 L12,0" Stroke="#512BD4" StrokeThickness="2"
+                                          WidthRequest="14" HeightRequest="8" VerticalOptions="Center" Margin="4,0,6,0"
+                                          InputTransparent="True" />
+                                        </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Número de identificación" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                <Entry x:Name="txtNumeroId"
+                                       Style="{StaticResource Campo}"
+                                       Placeholder="10 dígitos"
+                                       Keyboard="Numeric"
+                                       MaxLength="10"
+                                       TextChanged="OnNumeroIdentificacionChanged">
+                                </Entry>
+                            </Border>
+                            <Label x:Name="lblErrorId" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+            </Grid>
+                    <Grid x:Name="parApellidos" ColumnSpacing="16" RowSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Apellido paterno" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                <Entry x:Name="txtPaterno"
+                                       Style="{StaticResource Campo}"
+                                       Placeholder="Ej.: Vélez"
+                                       MaxLength="40"
+                                       TextChanged="OnSoloLetrasChanged">
+                                    <Entry.Behaviors>
+                                        <toolkit:TextValidationBehavior
+                                            RegexPattern="{x:Static services:Validaciones.PatronLetras}"
+                                            MinimumLength="2"
+                                            Flags="ValidateOnValueChanged"
+                                            ValidStyle="{StaticResource CampoValido}"
+                                            InvalidStyle="{StaticResource CampoInvalido}" />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label x:Name="lblErrorPaterno" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Apellido materno" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                <Entry x:Name="txtMaterno"
+                                       Style="{StaticResource Campo}"
+                                       Placeholder="Ej.: Torres"
+                                       MaxLength="40"
+                                       TextChanged="OnSoloLetrasChanged">
+                                    <Entry.Behaviors>
+                                        <toolkit:TextValidationBehavior
+                                            RegexPattern="{x:Static services:Validaciones.PatronLetras}"
+                                            MinimumLength="2"
+                                            Flags="ValidateOnValueChanged"
+                                            ValidStyle="{StaticResource CampoValido}"
+                                            InvalidStyle="{StaticResource CampoInvalido}" />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label x:Name="lblErrorMaterno" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nombres completos" Style="{StaticResource Etiqueta}" />
+                        <Border Style="{StaticResource Caja}">
+                            <Entry x:Name="txtNombres"
+                                   Style="{StaticResource Campo}"
+                                   Placeholder="Ej.: Fernando Javier"
+                                   MaxLength="60"
+                                   TextChanged="OnSoloLetrasChanged">
+                                <Entry.Behaviors>
+                                    <toolkit:TextValidationBehavior
+                                        RegexPattern="{x:Static services:Validaciones.PatronLetras}"
+                                        MinimumLength="2"
+                                        Flags="ValidateOnValueChanged"
+                                        ValidStyle="{StaticResource CampoValido}"
+                                        InvalidStyle="{StaticResource CampoInvalido}" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Border>
+                        <Label x:Name="lblErrorNombres" Style="{StaticResource Error}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Teléfono personal" Style="{StaticResource Etiqueta}" />
+                        <Border Style="{StaticResource Caja}">
+                            <Entry x:Name="txtTelefono"
+                                   Style="{StaticResource Campo}"
+                                   Placeholder="09XXXXXXXX"
+                                   Keyboard="Telephone"
+                                   MaxLength="10"
+                                   TextChanged="OnSoloNumerosChanged">
+                                <Entry.Behaviors>
+                                    <toolkit:TextValidationBehavior
+                                        RegexPattern="{x:Static services:Validaciones.PatronCelular}"
+                                        Flags="ValidateOnValueChanged"
+                                        ValidStyle="{StaticResource CampoValido}"
+                                        InvalidStyle="{StaticResource CampoInvalido}" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Border>
+                        <Label x:Name="lblErrorTelefono" Style="{StaticResource Error}" />
+                    </VerticalStackLayout>
+                    <Grid x:Name="parCorreos" ColumnSpacing="16" RowSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Correo personal" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                <Entry x:Name="txtCorreo"
+                                       Style="{StaticResource Campo}"
+                                       Placeholder="nombre@dominio.com"
+                                       Keyboard="Email"
+                                       MaxLength="80"
+                                       IsSpellCheckEnabled="False"
+                                       IsTextPredictionEnabled="False"
+                                       TextChanged="OnCorreoChanged">
+                                    <Entry.Behaviors>
+                                        <toolkit:EmailValidationBehavior
+                                            Flags="ValidateOnValueChanged"
+                                            ValidStyle="{StaticResource CampoValido}"
+                                            InvalidStyle="{StaticResource CampoInvalido}" />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label x:Name="lblErrorCorreo" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Confirmar correo" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                <Entry x:Name="txtConfirmarCorreo"
+                                       Style="{StaticResource Campo}"
+                                       Placeholder="Vuelve a escribir tu correo"
+                                       Keyboard="Email"
+                                       MaxLength="80"
+                                       IsSpellCheckEnabled="False"
+                                       IsTextPredictionEnabled="False"
+                                       TextChanged="OnCorreoChanged">
+                                </Entry>
+                            </Border>
+                            <Label x:Name="lblErrorConfirmar" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===================== DATOS ACADÉMICOS ===================== -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Datos académicos" Style="{StaticResource Seccion}" />
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Carrera" Style="{StaticResource Etiqueta}" />
+                        <Border Style="{StaticResource Caja}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Picker x:Name="pkCarrera"
+                                        Title="{OnPlatform Default='Seleccione...', WinUI=''}"
+                                        Style="{StaticResource Selector}"
+                                        SelectedIndexChanged="OnSelectorChanged" />
+                                <Path Grid.Column="1" Data="M0,0 L6,6 L12,0" Stroke="#512BD4" StrokeThickness="2"
+                                      WidthRequest="14" HeightRequest="8" VerticalOptions="Center" Margin="4,0,6,0"
+                                      InputTransparent="True" />
+                            </Grid>
+                        </Border>
+                        <Label x:Name="lblErrorCarrera" Style="{StaticResource Error}" />
+                    </VerticalStackLayout>
+                    <Grid x:Name="parModalidadCampus" ColumnSpacing="16" RowSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Modalidad" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                    <Picker x:Name="pkModalidad"
+                                            Title="{OnPlatform Default='Seleccione...', WinUI=''}"
+                                            Style="{StaticResource Selector}"
+                                            SelectedIndexChanged="OnSelectorChanged" />
+                                    <Path Grid.Column="1" Data="M0,0 L6,6 L12,0" Stroke="#512BD4" StrokeThickness="2"
+                                          WidthRequest="14" HeightRequest="8" VerticalOptions="Center" Margin="4,0,6,0"
+                                          InputTransparent="True" />
+                                        </Grid>
+                            </Border>
+                            <Label x:Name="lblErrorModalidad" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Campus" Style="{StaticResource Etiqueta}" />
+                            <Border Style="{StaticResource Caja}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                    <Picker x:Name="pkCampus"
+                                            Title="{OnPlatform Default='Seleccione...', WinUI=''}"
+                                            Style="{StaticResource Selector}"
+                                            SelectedIndexChanged="OnSelectorChanged" />
+                                    <Path Grid.Column="1" Data="M0,0 L6,6 L12,0" Stroke="#512BD4" StrokeThickness="2"
+                                          WidthRequest="14" HeightRequest="8" VerticalOptions="Center" Margin="4,0,6,0"
+                                          InputTransparent="True" />
+                                </Grid>
+                            </Border>
+                            <Label x:Name="lblErrorCampus" Style="{StaticResource Error}" />
+                        </VerticalStackLayout>
+            </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- BOTONES (mismo estilo que el ejemplo de clase) -->
+            <Button x:Name="btnGuardar"
+                    Text="GUARDAR DATOS"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    Margin="0,4,0,0"
+                    Clicked="OnGuardarClicked" />
+
+            <Button x:Name="btnLimpiar"
+                    Text="LIMPIAR"
+                    BackgroundColor="White"
+                    TextColor="#512BD4"
+                    BorderColor="#512BD4"
+                    BorderWidth="1"
+                    CornerRadius="8"
+                    HeightRequest="46"
+                    Clicked="OnLimpiarClicked" />
+
+            <Label x:Name="lblSesion"
+                   FontSize="12"
+                   TextColor="#777777"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

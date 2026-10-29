@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fvelezTA1.LoginPage"
+             Title="Ingreso"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <Grid Padding="24" RowDefinitions="*,Auto,*">
+            <Border Grid.Row="1"
+                    MaximumWidthRequest="440"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="White"
+                    Stroke="#D9DEE8"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="28">
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Taller Semana 1"
+                           FontSize="24"
+                           TextColor="Red"
+                           HorizontalOptions="Center" />
+
+                    <Image Source="logo_uisrael.png"
+                           HeightRequest="80"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Logo de la Universidad Israel" />
+
+                    <Label Text="Ingreso al sistema"
+                           FontSize="20"
+                           TextColor="Blue"
+                           HorizontalOptions="Center" />
+
+                    <Label Text="Inicia sesión para llenar el formulario de inscripción."
+                           FontSize="14"
+                           TextColor="#5A6475"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Usuario:" TextColor="#333333" Margin="0,8,0,0" />
+                    <Border Stroke="#C9CED8" StrokeThickness="1" StrokeShape="RoundRectangle 8" BackgroundColor="White" Padding="8,0">
+                    <Entry x:Name="txtUsuario"
+                           Placeholder="Tu usuario"
+                           PlaceholderColor="#9E9E9E"
+                           TextColor="#1C1C1C"
+                           BackgroundColor="Transparent"
+                           IsSpellCheckEnabled="False"
+                           IsTextPredictionEnabled="False"
+                           MaxLength="30"
+                           TextChanged="OnCampoChanged" />
+                    </Border>
+
+                    <Label Text="Contraseña:" TextColor="#333333" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border Stroke="#C9CED8" StrokeThickness="1" StrokeShape="RoundRectangle 8" BackgroundColor="White" Padding="8,0">
+                        <Entry x:Name="txtClave"
+                               Placeholder="Tu contraseña"
+                               PlaceholderColor="#9E9E9E"
+                               TextColor="#1C1C1C"
+                               BackgroundColor="Transparent"
+                               IsPassword="True"
+                               MaxLength="40"
+                               TextChanged="OnCampoChanged"
+                               Completed="OnIngresarClicked" />
+                        </Border>
+                        <Button x:Name="btnMostrar"
+                                Grid.Column="1"
+                                Text="Ver"
+                                BackgroundColor="#EEE8FB"
+                                TextColor="#512BD4"
+                                CornerRadius="8"
+                                Clicked="OnMostrarClaveClicked" />
+                    </Grid>
+
+                    <Label x:Name="lblError"
+                           TextColor="#C62828"
+                           FontSize="13"
+                           IsVisible="False" />
+
+                    <Button x:Name="btnIngresar"
+                            Text="INGRESAR"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            HeightRequest="48"
+                            Margin="0,6,0,0"
+                            Clicked="OnIngresarClicked" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

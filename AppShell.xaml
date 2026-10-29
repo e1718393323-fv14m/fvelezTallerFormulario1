@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="fvelezTA1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:fvelezTA1"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Taller Semana 1">
+
+    <!-- 1. Primero se muestra el login; la inscripción solo es accesible con sesión iniciada -->
+    <ShellContent
+        Title="Ingreso"
+        Route="login"
+        Shell.NavBarIsVisible="False"
+        ContentTemplate="{DataTemplate local:LoginPage}" />
+
+    <ShellContent
+        Title="Formulario de inscripción"
+        Route="inscripcion"
+        ContentTemplate="{DataTemplate local:MainPage}" />
+
+</Shell>
